@@ -1,0 +1,9 @@
+<!-- <generic-from></generic-from> -->
+<generic-dialog></generic-dialog>
+<button (click)="delete()">delete</button>
+<button (click)="confirm()">Confirm</button>
+<button (click)="warning()">Warning</button>
+<button (click)="error()">Error</button>
+
+<!-- 'create' | 'update'  -->
+<custom-table (buttonClicked)="test($event)" [items]="items" [config]="config"></custom-table>

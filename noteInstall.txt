@@ -1,0 +1,44 @@
+
+ng new NAME
+cd NAME
+npm i tailwindcss
+npm i -D @angular-builders/custom-webpack @fullhuman/postcss-purgecss
+npx tailwind init
+create in srcTailwind init
+Add Imports 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+create Root extra-webpack.config.js
+const purgecss = require('@fullhuman/postcss-purgecss')({
+  // Specify the paths to all of the template files in your project
+  content: ['./src/**/*.html', './src/**/*.component.ts'],
+  // Include any special characters you're using in this regular expression
+  defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+});
+
+module.exports = (config, options) => {
+  console.log(`Using '${config.mode}' mode`);
+  config.module.rules.push({
+    test: /tailwind\.scss$/,
+    use: [
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: [
+            require('tailwindcss')('./tailwind.config.js'),
+            require('autoprefixer'),
+            ...(config.mode === 'production' ? [purgecss] : [])
+          ]
+        }
+      }
+    ]
+  });
+  return config;
+};
+Console:
+  ng config projects.NAME.architect.build.builder @angular-builders/custom-webpack:browser
+  ng config projects.NAME.architect.build.options.customWebpackConfig.path extra-webpack.config.js
+  ng config projects.NAME.architect.serve.builder @angular-builders/custom-webpack:dev-server
+  ng config projects.NAME.architect.serve.options.customWebpackConfig.path extra-webpack.config.js
+  ng config projects.NAME.architect.build.options.styles[1] src/tailwind.scss
