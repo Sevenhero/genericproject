@@ -22,7 +22,7 @@ import { SortHelper } from 'src/servies/sortHelper.service';
   ],
 })
 export class CustomTableComponent implements OnInit {
-  constructor(private sortHelper: SortHelper) { }
+  constructor(private sortHelper: SortHelper) {}
   direction = Direction;
   itemsCopy: any[] = [];
   @Input() items: any[] = [];
@@ -34,10 +34,17 @@ export class CustomTableComponent implements OnInit {
 
   enumSelections = {};
   ngOnInit() {
+    this.setDefaultCType();
     for (let item of this.config.items) {
       if (item.ctype === 'enum') {
         this.enumSelections[item.propname] = null;
       }
+    }
+  }
+
+  private setDefaultCType() {
+    for (let item of this.config.items) {
+      if (!item.ctype) item.ctype = 'string';
     }
   }
 
@@ -105,14 +112,18 @@ export class CustomTableComponent implements OnInit {
     let option = this.getOptionByPropName(propName);
     option.direction =
       option.direction == Direction.ASC ? Direction.DESC : Direction.ASC;
-    this.sortHelper.sort(this.items, [propName], option.direction === Direction.ASC);
+    this.sortHelper.sort(
+      this.items,
+      [propName],
+      option.direction === Direction.ASC
+    );
   }
 
   private getOptionByPropName(propName: string) {
     return this.config.items.find((item) => item.propname === propName);
   }
 }
-type CType = 'number' | 'string' | 'date' | 'button' | 'enum';
+export type CType = 'number' | 'string' | 'date' | 'button' | 'enum';
 export class SelectItem {
   key: any;
   value: any;
@@ -125,7 +136,7 @@ export interface EnumHelper {
 export class CustomTableItem {
   propname?: string;
   label: string;
-  ctype: CType;
+  ctype?: CType = 'string';
   minwidth?: string;
   direction?: Direction;
   functionName?: string;

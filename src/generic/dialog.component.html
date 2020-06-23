@@ -27,7 +27,10 @@
           <i (click)="toggleModal()" class="fas fa-times"></i>
         </div>
       </div>
-      <p>{{ description }}</p>
+      <p *ngIf="description">{{ description }}</p>
+      <div *ngIf="formConfig">
+        <generic-from [model]="formModel" [config]="formConfig"></generic-from>
+      </div>
       <div class="flex justify-end pt-2">
         <button *ngIf="config?.showCancelButton" (click)="cancel()" class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">Abbrechen</button>
         <button (click)="confirmed()" [ngClass]="config?.confirmButtonColor" class="modal-close px-4 p-3 rounded-lg text-white">{{config?.confirmButtonText}}</button>

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { EnumHelper, CType } from './table.component';
+import { CopyObjectService } from 'src/servies/CopyObject.service';
 
 @Component({
   selector: 'generic-from',
@@ -12,21 +14,59 @@ import { Component } from '@angular/core';
     `,
   ],
 })
-export class FormComponent {
+export class FormComponent implements OnInit, OnChanges {
   constructor() {
     this.currentYear = new Date().getFullYear();
   }
   currentYear: number;
+  @Input() config: CustomFormConfig;
+  @Input() model: {};
+  modelCopy;
+  enumSelections = {};
+
+  ngOnChanges() {
+    this.copyModel();
+  }
+
+  ngOnInit() {
+    this.setDefaultCType();
+    this.copyModel();
+  }
+
+  private setDefaultCType() {
+    for (let item of this.config.items) {
+      if (!item.ctype) item.ctype = 'string';
+    }
+  }
+
+  private copyModel() {
+    this.modelCopy = this.model
+      ? CopyObjectService.clone(this.model)
+      : this.createEmptyObject();
+    console.info(this.modelCopy);
+  }
+
+  private createEmptyObject() {
+    let result = {};
+    for (let item of this.config.items) {
+      result[item.propname] = null;
+    }
+    return result;
+  }
 }
 
-type FormType = 'number' | 'string' | 'Date' | 'select';
+export class CustomFormConfig {
+  items: FormConf[] = [];
+}
 
 export class FormConf {
+  propname: string;
   label: string;
-  ctype?: FormType = 'string';
+  ctype?: CType = 'string';
   format?: string;
-  placeholder?:string;
+  placeholder?: string;
   minlength?: number;
   maxlength?: number;
   required?: boolean = true;
+  enumHelper?: EnumHelper;
 }

@@ -1,10 +1,16 @@
 <h1>My Sandbox by Sven Kernke</h1>
-<!-- <generic-from></generic-from> -->
 <generic-dialog></generic-dialog>
 <button class="px-4 p-3 rounded-lg" (click)="delete()">delete</button>
 <button class="px-4 p-3 rounded-lg" (click)="confirm()">Confirm</button>
 <button class="px-4 p-3 rounded-lg" (click)="warning()">Warning</button>
 <button class="px-4 p-3 rounded-lg" (click)="error()">Error</button>
+<button class="px-4 p-3 rounded-lg" (click)="dialogEmpty()">
+  Dialog empty
+</button>
+<button class="px-4 p-3 rounded-lg" (click)="dialogWithObject()">
+  Dialog With object
+</button>
 
 <!-- 'create' | 'update'  -->
 <custom-table (buttonClicked)="test($event)" [items]="items" [config]="config"></custom-table>
+<generic-from [model]="items[0]" [config]="formconfig"></generic-from>

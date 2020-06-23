@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
-import { DialogService, MessageBoxService } from 'src/generic/dialog.service';
-import { ButtonClickedEvent, CustomTableConfig, Direction, Gender, GenderHelper } from 'src/generic/table.component';
+import { DialogService } from 'src/generic/dialog.service';
+import {
+  ButtonClickedEvent,
+  CustomTableConfig,
+  Gender,
+  GenderHelper,
+} from 'src/generic/table.component';
 import { SortHelper } from 'src/servies/sortHelper.service';
+import { CustomFormConfig } from 'src/generic/form.component';
 
 @Component({
   selector: 'app-root',
@@ -11,17 +17,14 @@ import { SortHelper } from 'src/servies/sortHelper.service';
 export class AppComponent {
   constructor(
     private dialogService: DialogService,
-    private messageBoxService: MessageBoxService,
     private sortHelper: SortHelper
-  ) {
-
-  }
+  ) {}
 
   delete() {
-    this.messageBoxService
+    this.dialogService
       .delete('Person löschen', 'Wollen sie Hans Meier wirklich löschen?')
       .subscribe((res) => {
-        this.messageBoxService
+        this.dialogService
           .confirm(
             'Person entgültig löschen?',
             'Dies kann nicht rückgängig gemacht werden'
@@ -33,7 +36,7 @@ export class AppComponent {
   }
 
   confirm() {
-    this.messageBoxService
+    this.dialogService
       .confirm(
         'Person entgültig löschen?',
         'Dies kann nicht rückgängig gemacht werden'
@@ -44,7 +47,7 @@ export class AppComponent {
   }
 
   warning() {
-    this.messageBoxService
+    this.dialogService
       .warning(
         'Es ist ein Fehler aufgetreten',
         'Dies kann nur gemacht werden wenn die betroffene Person bereits gelöscht wurde.'
@@ -55,7 +58,7 @@ export class AppComponent {
   }
 
   error() {
-    this.messageBoxService
+    this.dialogService
       .error(
         'Person konnte nicht gelöscht werden',
         'Bitte entfernen Sie die Person zu erst aus allen Firmeneinträgen.'
@@ -65,30 +68,122 @@ export class AppComponent {
       });
   }
 
+  dialogEmpty() {
+    this.dialogService.create('Person', this.formconfig).subscribe((res) => {
+      console.log('error');
+    });
+  }
+
+  dialogWithObject() {
+    this.dialogService
+      .edit('Person', this.formconfig, this.items[0])
+      .subscribe((res) => {
+        console.log('error');
+      });
+  }
+
   // 'create' | 'update'
   items = [
-    { id: 1, firstName: "Sven", lastName: "Kernke", "count": 2, someDate: new Date(2019, 1, 15), zahl: 5, gender: Gender.man },
-    { id: 2, firstName: "Alexey", lastName: "Balakin", "count": 0, someDate: new Date(2020, 3, 2), zahl: 9, gender: Gender.man },
-    { id: 3, firstName: "Sebastian", lastName: "Dittmann", "count": -1, someDate: new Date(2020, 1, 10), zahl: 1, gender: Gender.man },
-    { id: 4, firstName: "Alexander", lastName: "Ott", "count": 5, someDate: new Date(2020, 1, 15), zahl: 1, gender: Gender.divers },
-    { id: 5, firstName: "Joel", lastName: "Krönig", "count": 5, someDate: new Date(2020, 1, 15), zahl: 1, gender: Gender.woman },
-    { id: 6, firstName: "Mirsolaw", lastName: "Kernke", "count": 5, someDate: new Date(2020, 1, 15), zahl: 1, gender: Gender.man }
+    {
+      id: 1,
+      firstName: 'Sven',
+      lastName: 'Kernke',
+      count: 2,
+      someDate: new Date(2019, 6, 1),
+      zahl: 5,
+      gender: Gender.man,
+    },
+    {
+      id: 2,
+      firstName: 'Alexey',
+      lastName: 'Balakin',
+      count: 0,
+      someDate: new Date(2020, 3, 2),
+      zahl: 9,
+      gender: Gender.man,
+    },
+    {
+      id: 3,
+      firstName: 'Sebastian',
+      lastName: 'Dittmann',
+      count: -1,
+      someDate: new Date(2020, 1, 10),
+      zahl: 1,
+      gender: Gender.man,
+    },
+    {
+      id: 4,
+      firstName: 'Alexander',
+      lastName: 'Ott',
+      count: 5,
+      someDate: new Date(2020, 1, 15),
+      zahl: 1,
+      gender: Gender.divers,
+    },
+    {
+      id: 5,
+      firstName: 'Joel',
+      lastName: 'Krönig',
+      count: 5,
+      someDate: new Date(2020, 1, 15),
+      zahl: 1,
+      gender: Gender.woman,
+    },
+    {
+      id: 6,
+      firstName: 'Mirsolaw',
+      lastName: 'Kernke',
+      count: 5,
+      someDate: new Date(2020, 1, 15),
+      zahl: 1,
+      gender: Gender.man,
+    },
+    {
+      id: 7,
+      firstName: 'Nôel',
+      lastName: 'Schenk',
+      count: 8,
+      someDate: new Date(2020, 1, 15),
+      zahl: 1,
+      gender: Gender.man,
+    },
   ];
   config: CustomTableConfig = {
     items: [
-      { propname: "firstName", label: "Vorname", ctype: "string" },
-      { propname: "lastName", label: "Nachname", ctype: "string" },
-      { propname: "someDate", label: "Datum", ctype: "date" },
-      { propname: "count", label: "Count", ctype: "number" },
-      { propname: "zahl", label: "Zahl", ctype: "number" },
-      { propname: "gender", label: "Geschlecht", ctype: "enum", enumHelper: new GenderHelper() },
-      { label: "Edit", ctype: "button", functionName: "editTest" },
-    ]
+      { propname: 'firstName', label: 'Vorname' },
+      { propname: 'lastName', label: 'Nachname' },
+      { propname: 'someDate', label: 'Datum', ctype: 'date' },
+      { propname: 'count', label: 'Count', ctype: 'number' },
+      { propname: 'zahl', label: 'Zahl', ctype: 'number' },
+      {
+        propname: 'gender',
+        label: 'Geschlecht',
+        ctype: 'enum',
+        enumHelper: new GenderHelper(),
+      },
+      { label: 'Edit', ctype: 'button', functionName: 'editTest' },
+    ],
+  };
+
+  formconfig: CustomFormConfig = {
+    items: [
+      { propname: 'firstName', label: 'Vorname' },
+      { propname: 'lastName', label: 'Nachname' },
+      { propname: 'someDate', label: 'Datum', ctype: 'date' },
+      { propname: 'count', label: 'Count', ctype: 'number' },
+      { propname: 'zahl', label: 'Zahl', ctype: 'number' },
+      {
+        propname: 'gender',
+        label: 'Geschlecht',
+        ctype: 'enum',
+        enumHelper: new GenderHelper(),
+      },
+    ],
   };
 
   test(event: ButtonClickedEvent) {
     switch (event.functionName) {
-      case "editTest":
+      case 'editTest':
         this.editTest(event.id);
         break;
       default:
@@ -98,6 +193,6 @@ export class AppComponent {
 
   editTest(id) {
     console.log(id);
-    alert("you wanted to change item with id:" + id);
+    alert('you wanted to change item with id:' + id);
   }
 }

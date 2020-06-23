@@ -1,7 +1,8 @@
-import { Component, Output, AfterViewInit } from '@angular/core';
-import { DialogService, MessageBoxService } from './dialog.service';
+import { Component, Output, AfterViewInit, Input } from '@angular/core';
+import { DialogService } from './dialog.service';
 import { DialogType } from './generic.classes';
 import { Subject } from 'rxjs';
+import { CustomFormConfig } from './form.component';
 
 @Component({
   selector: 'generic-dialog',
@@ -26,11 +27,14 @@ import { Subject } from 'rxjs';
 export class DialogComponent implements AfterViewInit {
   constructor(
     private dialogService: DialogService,
-    private messageBoxService: MessageBoxService
+    private messageBoxService: DialogService
   ) {
     this.dialogService.registerComponent(this);
     this.messageBoxService.registerComponent(this);
   }
+
+  formConfig: CustomFormConfig;
+  formModel: {};
 
   ngAfterViewInit() {
     if (this.sub) {
@@ -48,25 +52,33 @@ export class DialogComponent implements AfterViewInit {
     confirmButtonColor: string;
   };
 
-  public show(type: DialogType, config: Object) {
-    this.fillConfig(type);
-    if (config) {
-    }
-    this.toggleModal();
-  }
   sub: Subject<any>;
-  public showText(type: DialogType, title: string, description: string) {
-    this.fillConfig(type);
-    this.title = title;
-    this.description = description;
+  public showText(type: DialogType, title?: string, description?: string) {
+    this.fillConfig(type, title, description);
     this.sub = new Subject();
     this.toggleModal();
     return this.sub;
   }
 
-  private fillConfig(type: DialogType) {
+  public edit(
+    type: DialogType,
+    title: string,
+    formConfig: CustomFormConfig,
+    model?: Object
+  ) {
+    this.fillConfig(type, title);
+    this.sub = new Subject();
+    this.formConfig = formConfig;
+    this.formModel = model;
+    this.toggleModal();
+    return this.sub;
+  }
+
+  private fillConfig(type: DialogType, title: string, description?: string) {
     this.config = {} as any;
     this.config.type = type;
+    this.title = title;
+    this.description = description;
     this.config.showCancelButton = this.showCancelButton();
     this.config.confirmButtonText = this.confirmButtonText();
     this.config.confirmButtonColor = this.confirmButtonColor();
@@ -83,29 +95,29 @@ export class DialogComponent implements AfterViewInit {
   }
 
   buttonText = {
-    create: "Erstellen",
-    update: "Updaten",
-    delete: "Löschen",
-    confirm: "OK",
-    warning: "OK",
-    error: "OK",
-  }
+    create: 'Erstellen',
+    update: 'Updaten',
+    delete: 'Löschen',
+    confirm: 'OK',
+    warning: 'OK',
+    error: 'OK',
+  };
   private confirmButtonText() {
     if (!this.config.type) return;
     return this.buttonText[this.config.type];
   }
 
   buttonConfirmColor = {
-    create: "bg-indigo-400 hover:bg-indigo-500",
-    update: "bg-green-500 hover:bg-green-600",
-    delete: "bg-red-600 hover:bg-red-700",
-    confirm: "bg-gray-400 hover:bg-gray-500",
-    warning: "bg-yellow-400 hover:bg-yellow-500",
-    error: "bg-gray-400 hover:bg-gray-500",
-  }
+    create: 'bg-indigo-400 hover:bg-indigo-500',
+    update: 'bg-green-500 hover:bg-green-600',
+    delete: 'bg-red-600 hover:bg-red-700',
+    confirm: 'bg-gray-400 hover:bg-gray-500',
+    warning: 'bg-yellow-400 hover:bg-yellow-500',
+    error: 'bg-gray-400 hover:bg-gray-500',
+  };
   private confirmButtonColor() {
     if (!this.config.type) return;
-    return this.buttonConfirmColor[this.config.type]
+    return this.buttonConfirmColor[this.config.type];
   }
 
   confirmed() {
