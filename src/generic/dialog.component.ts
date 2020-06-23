@@ -82,40 +82,30 @@ export class DialogComponent implements AfterViewInit {
     );
   }
 
+  buttonText = {
+    create: "Erstellen",
+    update: "Updaten",
+    delete: "Löschen",
+    confirm: "OK",
+    warning: "OK",
+    error: "OK",
+  }
   private confirmButtonText() {
     if (!this.config.type) return;
-    switch (this.config.type) {
-      case 'create':
-        return 'Erstellen';
-      case 'update':
-        return 'Updaten';
-      case 'delete':
-        return 'Löschen';
-      case 'confirm':
-      case 'warning':
-      case 'error':
-        return 'OK';
-    }
+    return this.buttonText[this.config.type];
   }
 
+  buttonConfirmColor = {
+    create: "bg-indigo-400 hover:bg-indigo-500",
+    update: "bg-green-500 hover:bg-green-600",
+    delete: "bg-red-600 hover:bg-red-700",
+    confirm: "bg-gray-400 hover:bg-gray-500",
+    warning: "bg-yellow-400 hover:bg-yellow-500",
+    error: "bg-gray-400 hover:bg-gray-500",
+  }
   private confirmButtonColor() {
     if (!this.config.type) return;
-    switch (this.config.type) {
-      case 'create':
-        return 'bg-indigo-400 hover:bg-indigo-500';
-      case 'update':
-        return 'bg-green-500 hover:bg-green-600';
-      case 'delete':
-        return 'bg-red-600 hover:bg-red-700';
-      case 'confirm':
-        return 'bg-gray-400 hover:bg-gray-500';
-      case 'warning':
-        return 'bg-yellow-400 hover:bg-yellow-500';
-      case 'error':
-        return 'bg-gray-400 hover:bg-gray-500';
-      default:
-        throw 'backgroundColor:not implemented';
-    }
+    return this.buttonConfirmColor[this.config.type]
   }
 
   confirmed() {

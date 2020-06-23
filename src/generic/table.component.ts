@@ -6,8 +6,7 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-
+import { SortHelper } from 'src/servies/sortHelper.service';
 @Component({
   selector: 'custom-table',
   templateUrl: 'table.component.html',
@@ -23,6 +22,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
   ],
 })
 export class CustomTableComponent implements OnInit {
+  constructor(private sortHelper: SortHelper) { }
   direction = Direction;
   itemsCopy: any[] = [];
   @Input() items: any[] = [];
@@ -105,13 +105,7 @@ export class CustomTableComponent implements OnInit {
     let option = this.getOptionByPropName(propName);
     option.direction =
       option.direction == Direction.ASC ? Direction.DESC : Direction.ASC;
-    this.items.sort((a, b) => {
-      if (option.direction == Direction.ASC) {
-        return a[propName] < b[propName] ? -1 : 1;
-      } else {
-        return a[propName] > b[propName] ? -1 : 1;
-      }
-    });
+    this.sortHelper.sort(this.items, [propName], option.direction === Direction.ASC);
   }
 
   private getOptionByPropName(propName: string) {

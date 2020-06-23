@@ -1,73 +1,44 @@
-<!-- <div  class="table-auto">
-    <div class="parent">
-        <div (click)="sort(configItem.propname)" *ngFor="let configItem of config.items" [ngStyle]="{
-              'min-width': configItem.minwidth ? configItem.minwidth : null
-            }">
-            <b *ngIf="configItem.ctype!='button'">{{ configItem.text }}
-                {{configItem.direction==direction.ASC?"Asc":"Desc"}}</b>
-        </div>
-    </div>
-    <div class="parent">
-        <div *ngFor="let configItem of config.items" [ngStyle]="{
-              'min-width': configItem.minwidth ? configItem.minwidth : null
-            }">
-            <input style="width:100%" *ngIf="configItem.ctype == 'string'" (input)="search($event,configItem.propname)" type="text">
-            <input style="width:100%" *ngIf="configItem.ctype == 'date'" (input)="search($event,configItem.propname)" type="date">
-            <input style="width:100%" *ngIf="configItem.ctype == 'number'" (input)="search($event,configItem.propname)" type="number">
-        </div>
-    </div>
-    <div>
-        <td class="parent" class="border px-4 py-2" *ngFor="let item of items">
-            <td *ngFor="let configItem of config.items" [ngStyle]="{
-              'min-width': configItem.minwidth ? configItem.minwidth : null
-            }">
-                <span
-                    *ngIf="configItem.ctype != 'date' && configItem.ctype != 'button'">{{ item[configItem.propname] }}</span>
-                <span *ngIf="configItem.ctype == 'date'">{{ item[configItem.propname] | date : "dd.MM.yyyy"}}</span>
-                <button (click)="bclicked(item.id,configItem.functionName)"
-                    *ngIf="configItem.ctype == 'button'">{{configItem.text}}</button>
-            </td>
-        </td>
-        <div *ngIf="items.length == 0">Keine Ergebnisse</div>
-    </div>
-</div> -->
-
 <table class="table-auto">
-    <thead>
-      <tr>
-        <th (click)="sort(configItem.propname)" *ngFor="let configItem of config.items" [ngStyle]="{
+  <thead>
+    <tr>
+      <th (click)="sort(configItem.propname)" *ngFor="let configItem of config.items" [ngStyle]="{
             'min-width': configItem.minwidth ? configItem.minwidth : null
           }"><b *ngIf="configItem.ctype!='button'">
-              <i *ngIf="configItem.direction == 0 || configItem.direction == 1" [ngClass]="configItem.direction==direction.ASC?'fa-sort-amount-down-alt':'fa-sort-amount-up-alt'" class="fas"></i>
-              {{ configItem.label }}</b></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border px-4 py-2" *ngFor="let configItem of config.items" [ngStyle]="{
+          <i *ngIf="configItem.direction == 0 || configItem.direction == 1"
+            [ngClass]="configItem.direction==direction.ASC?'fa-sort-amount-down-alt':'fa-sort-amount-up-alt'"
+            class="fas"></i>
+          {{ configItem.label }}</b></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-4 py-2" *ngFor="let configItem of config.items" [ngStyle]="{
             'min-width': configItem.minwidth ? configItem.minwidth : null
-          }"> 
-            <input *ngIf="configItem.ctype!='enum'" style="width:100%" (input)="search($event,configItem.propname)" type="{{configItem.ctype}}">
-            <select *ngIf="configItem.ctype=='enum'" ([ngModel])="enumSelections[configItem.propname].value" (change)="search($event,configItem.propname)">
-              <option style="display: none;" value="all"></option>
-              <option value="">alle</option>
-              <option *ngFor="let eItem of configItem.enumHelper.getSelectItems()" [value]="+eItem.value">{{eItem.key}}</option>
-            </select>
-        </td>
-      </tr> 
-      <tr class="bg-gray-100" *ngFor="let item of items">
-        <td class="border px-4 py-2" *ngFor="let configItem of config.items" [ngStyle]="{
+          }">
+        <input *ngIf="configItem.ctype!='enum'" style="width:100%" (input)="search($event,configItem.propname)"
+          type="{{configItem.ctype}}">
+        <select *ngIf="configItem.ctype=='enum'" ([ngModel])="enumSelections[configItem.propname].value"
+          (change)="search($event,configItem.propname)">
+          <option style="display: none;" value="all"></option>
+          <option value="">alle</option>
+          <option *ngFor="let eItem of configItem.enumHelper.getSelectItems()" [value]="+eItem.value">{{eItem.key}}
+          </option>
+        </select>
+      </td>
+    </tr>
+    <tr class="bg-gray-100" *ngFor="let item of items">
+      <td class="border px-4 py-2" *ngFor="let configItem of config.items" [ngStyle]="{
           'min-width': configItem.minwidth ? configItem.minwidth : null
         }">
         <span
-        *ngIf="configItem.ctype != 'date' && configItem.ctype != 'button' && configItem.ctype != 'enum'">{{ item[configItem.propname] }}</span>
-    <span *ngIf="configItem.ctype == 'date'">{{ item[configItem.propname] | date : "dd.MM.yyyy"}}</span>
-    <span *ngIf="configItem.ctype == 'enum'">{{ configItem.enumHelper.getText(item[configItem.propname]) }}</span>
-    <button (click)="bclicked(item.id,configItem.functionName)"
-        *ngIf="configItem.ctype == 'button'">{{configItem.text}}</button></td>
+          *ngIf="configItem.ctype != 'date' && configItem.ctype != 'button' && configItem.ctype != 'enum'">{{ item[configItem.propname] }}</span>
+        <span *ngIf="configItem.ctype == 'date'">{{ item[configItem.propname] | date : "dd.MM.yyyy"}}</span>
+        <span *ngIf="configItem.ctype == 'enum'">{{ configItem.enumHelper.getText(item[configItem.propname]) }}</span>
+        <button (click)="bclicked(item.id,configItem.functionName)"
+          *ngIf="configItem.ctype == 'button'">{{configItem.text}}</button></td>
     </tr>
-    <tr class="bg-gray-100" *ngIf="items.length == 0">
-    <td  class="border px-4 py-2">Keine Ergebnisse</td>
-    </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
+<div class="bg-gray-100" *ngIf="items.length == 0">
+  <div class="border px-4 py-2">Keine Ergebnisse</div>
+</div>
