@@ -21,8 +21,9 @@ export class AppComponent {
   ) {}
 
   delete() {
+    let personenName = 'Sven Kernke';
     this.dialogService
-      .delete('Person löschen', 'Wollen sie Hans Meier wirklich löschen?')
+      .delete('Person löschen', `Wollen sie ${personenName} wirklich löschen?`)
       .subscribe((res) => {
         this.dialogService
           .confirm(
@@ -36,11 +37,17 @@ export class AppComponent {
   }
 
   confirm() {
+    // this.dialogService
+    //   .confirm(
+    //     'Person entgültig löschen?',
+    //     'Dies kann nicht rückgängig gemacht werden'
+    //   )
+    //   .subscribe((res) => {
+    //     console.log('confirm');
+    //   });
+
     this.dialogService
-      .confirm(
-        'Person entgültig löschen?',
-        'Dies kann nicht rückgängig gemacht werden'
-      )
+      .confirm('Hallo Simon', 'bist du wirklich simon?')
       .subscribe((res) => {
         console.log('confirm');
       });
@@ -95,8 +102,8 @@ export class AppComponent {
     },
     {
       id: 2,
-      firstName: 'Alexey',
-      lastName: 'Balakin',
+      firstName: 'Max',
+      lastName: 'Meier',
       count: 0,
       someDate: new Date(2020, 3, 2),
       zahl: 9,
@@ -104,8 +111,8 @@ export class AppComponent {
     },
     {
       id: 3,
-      firstName: 'Sebastian',
-      lastName: 'Dittmann',
+      firstName: 'Jan',
+      lastName: 'Holz',
       count: -1,
       someDate: new Date(2020, 1, 10),
       zahl: 1,
@@ -114,7 +121,7 @@ export class AppComponent {
     {
       id: 4,
       firstName: 'Alexander',
-      lastName: 'Ott',
+      lastName: 'König',
       count: 5,
       someDate: new Date(2020, 1, 15),
       zahl: 1,
@@ -123,7 +130,7 @@ export class AppComponent {
     {
       id: 5,
       firstName: 'Joel',
-      lastName: 'Krönig',
+      lastName: 'Stein',
       count: 5,
       someDate: new Date(2020, 1, 15),
       zahl: 1,
@@ -132,7 +139,7 @@ export class AppComponent {
     {
       id: 6,
       firstName: 'Mirsolaw',
-      lastName: 'Kernke',
+      lastName: 'Gras',
       count: 5,
       someDate: new Date(2020, 1, 15),
       zahl: 1,
@@ -141,7 +148,7 @@ export class AppComponent {
     {
       id: 7,
       firstName: 'Nôel',
-      lastName: 'Schenk',
+      lastName: 'Vier',
       count: 8,
       someDate: new Date(2020, 1, 15),
       zahl: 1,
@@ -193,6 +200,12 @@ export class AppComponent {
 
   editTest(id) {
     console.log(id);
-    alert('you wanted to change item with id:' + id);
+    let person = this.items.find((p) => p.id === id);
+    this.dialogService
+      .edit('Person', this.formconfig, person)
+      .subscribe((res) => {
+        console.log('error');
+      });
+    // alert('you wanted to change item with id:' + id);
   }
 }
