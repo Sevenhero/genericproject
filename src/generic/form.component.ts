@@ -25,12 +25,12 @@ export class FormComponent implements OnInit, OnChanges {
   enumSelections = {};
 
   ngOnChanges() {
-    this.copyModel();
+    this.copyModelAndPreselect();
   }
 
   ngOnInit() {
     this.setDefaultCType();
-    this.copyModel();
+    this.copyModelAndPreselect();
   }
 
   private setDefaultCType() {
@@ -39,11 +39,11 @@ export class FormComponent implements OnInit, OnChanges {
     }
   }
 
-  private copyModel() {
+  private copyModelAndPreselect() {
     this.modelCopy = this.model
       ? CopyObjectService.clone(this.model)
       : this.createEmptyObject();
-    console.info(this.modelCopy);
+
   }
 
   private createEmptyObject() {

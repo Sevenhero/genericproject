@@ -18,7 +18,7 @@ export class AppComponent {
   constructor(
     private dialogService: DialogService,
     private sortHelper: SortHelper
-  ) {}
+  ) { }
 
   delete() {
     let personenName = 'Sven Kernke';
@@ -81,9 +81,9 @@ export class AppComponent {
     });
   }
 
-  dialogWithObject() {
+  dialogWithObject(obj = this.items[0]) {
     this.dialogService
-      .edit('Person', this.formconfig, this.items[0])
+      .edit('Person', this.formconfig, obj)
       .subscribe((res) => {
         console.log('error');
       });
